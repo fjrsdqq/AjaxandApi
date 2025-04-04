@@ -1,13 +1,25 @@
-const req = new XMLHttpRequest();
+const jokes = document.querySelector('#jokes');
+const button = document.querySelector('button');
 
-req.onload = function () {
-    	data = JSON.parse(this.responseText);
-    	console.log(data);
-    };
-
-req.onerror = function () {
-    console.log('Error', this);
+const addJoke = async () => {
+	const jokeText = await getJokes();
+	const newLI = document.createElement('LI');
+	newLI.append(jokeText);
+	jokes.append(newLI);
 };
 
-req.open('GET', 'https://swapi.dev/api/people/1');
-req.send();
+const getJokes = async () => {
+	try {
+		const config = {
+			headers: {
+				Accept: 'application/json',
+			},
+		};  
+		const res = await axios.get('https://icanhazdadjoke123123.com/', config);
+		return res.data.joke;
+	} catch (error) {
+		return 'No Jokes Available!';
+	}
+};
+
+button.addEventListener('click', addJoke);
